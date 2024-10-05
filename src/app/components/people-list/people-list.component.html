@@ -1,0 +1,47 @@
+<div class="field">
+  <label class="label">Search</label>
+  <div class="control">
+    <input
+      type="text"
+      class="input"
+      [(ngModel)]="searchQuery"
+      (input)="search()"
+      placeholder="Search for characters..."
+    />
+  </div>
+</div>
+
+<div class="columns is-multiline">
+  <div
+    *ngFor="let person of people$ | async; let i = index"
+    class="column is-one-third"
+  >
+    <div class="card card-hover">
+      <div class="card-content">
+        <div class="media-content has-text-centered">
+          <p class="title is-4">{{ person.name }}</p>
+          <p class="subtitle is-6">Gender - {{ person.gender }}</p>
+        </div>
+        <div class="content"></div>
+      </div>
+      <div class="card-footer">
+        <div class="card-footer-item">
+          <a [routerLink]="['/detail', i + 1]" class="button is-link"
+            ><i class="fa fa-eye"></i> View Details</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- loading state -->
+<div *ngIf="loading$ | async" class="mt-4 is-flex is-justify-content-center">
+  <div class="loader is-loading"></div>
+</div>
+
+<div class="mb-4 is-flex is-justify-content-center">
+  <button (click)="loadNextPage()" class="button is-primary is-dark mt-4">
+    Load More Characters
+  </button>
+</div>

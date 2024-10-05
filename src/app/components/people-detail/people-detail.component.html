@@ -1,0 +1,22 @@
+<!-- Page Details -->
+
+<!-- loading state -->
+<div *ngIf="loading$ | async" class="mt-4 is-flex is-justify-content-center">
+  <div class="loader is-loading"></div>
+</div>
+<div *ngIf="person$ | async as person">
+  <div class="columns">
+    <div class="column is-one-third">
+      <div class="card">
+        <div class="card-content">
+          <div class="media-content">
+            <p class="title is-4">{{ person.name }}</p>
+            <p class="subtitle is-6">Gender - {{ person.gender }}</p>
+          </div>
+          <div class="content"></div>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+</div>
