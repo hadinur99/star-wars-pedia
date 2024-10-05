@@ -1,16 +1,6 @@
-<div class="field">
-  <label class="label">Search</label>
-  <div class="control">
-    <input
-      type="text"
-      class="input"
-      [(ngModel)]="searchQuery"
-      (input)="search()"
-      placeholder="Search for characters..."
-    />
-  </div>
+<div>
+  <h1>Characters</h1>
 </div>
-
 <div class="columns is-multiline">
   <div
     *ngFor="let person of people$ | async; let i = index"
@@ -41,7 +31,11 @@
 </div>
 
 <div class="mb-4 is-flex is-justify-content-center">
-  <button (click)="loadNextPage()" class="button is-primary is-dark mt-4">
+  <button
+    *ngIf="isShown"
+    (click)="loadNextPage()"
+    class="button is-primary is-dark mt-4"
+  >
     Load More Characters
   </button>
 </div>

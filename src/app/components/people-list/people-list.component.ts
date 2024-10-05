@@ -16,6 +16,8 @@ export class PeopleListComponent implements OnInit {
 
   searchQuery: string = '';
 
+  isShown: boolean = true;
+
   constructor(private peopleStore: PeopleStore) {}
 
   ngOnInit(): void {
@@ -40,6 +42,8 @@ export class PeopleListComponent implements OnInit {
     this.peopleStore.nextPage$.pipe(take(1)).subscribe((nextPage) => {
       if (nextPage) {
         this.peopleStore.fetchPeople(nextPage);
+      } else {
+        this.isShown = false;
       }
     });
   }

@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { Person } from '../models/person';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { Film } from '../models/films';
+import { HomeWorld } from '../models/homeworld';
 
 export interface PeopleState {
   people: Person[];
@@ -84,9 +86,24 @@ export class PeopleStore extends ComponentStore<PeopleState> {
       loading: true,
       error: null,
       person: null,
+      films: [],
+      homeworld: null,
     }));
 
     return this.http.get<Person>(`${this.SWAPI_API}/${peopleId}`).pipe(
+      switchMap((person) => {
+        const filmsRequest = person.films.map((url: any) =>
+          this.http.get<Film>(url)
+        );
+        const homeworldRequest = this.http.get<HomeWorld>(person.homeworld);
+        return forkJoin([forkJoin(filmsRequest), homeworldRequest]).pipe(
+          map(([films, homeworld]) => ({
+            ...person,
+            films: films.map((film) => film.title),
+            homeworld: homeworld.name,
+          }))
+        );
+      }),
       tap({
         next: (response) => {
           this.setState((state) => ({

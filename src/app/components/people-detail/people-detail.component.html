@@ -5,18 +5,81 @@
   <div class="loader is-loading"></div>
 </div>
 <div *ngIf="person$ | async as person">
-  <div class="columns">
+  <div class="columns is-justify-content-center">
     <div class="column is-one-third">
       <div class="card">
         <div class="card-content">
-          <div class="media-content">
+          <div class="media-content has-text-centered">
             <p class="title is-4">{{ person.name }}</p>
-            <p class="subtitle is-6">Gender - {{ person.gender }}</p>
           </div>
-          <div class="content"></div>
         </div>
-        <div class="card-footer"></div>
       </div>
+    </div>
+  </div>
+
+  <div class="columns is-justify-content-center">
+    <div class="column is-half">
+      <table class="table is-striped is-fullwidth">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Gender</td>
+            <td>{{ person.gender }}</td>
+          </tr>
+          <tr>
+            <td>Height</td>
+            <td>{{ person.height }} cm</td>
+          </tr>
+          <tr>
+            <td>Mass</td>
+            <td>{{ person.mass }} kg</td>
+          </tr>
+          <tr>
+            <td>Hair Color</td>
+            <td>{{ person.hair_color }}</td>
+          </tr>
+          <tr>
+            <td>Skin Color</td>
+            <td>{{ person.skin_color }}</td>
+          </tr>
+          <tr>
+            <td>Eye Color</td>
+            <td>{{ person.eye_color }}</td>
+          </tr>
+          <tr>
+            <td>Birth Year</td>
+            <td>{{ person.birth_year }}</td>
+          </tr>
+          <tr>
+            <td>Homeworld</td>
+            <td>
+              <!-- <a [href]="person.homeworld" target="_blank">View Homeworld</a> -->
+              {{ person.homeworld }}
+            </td>
+          </tr>
+          <tr>
+            <td>Films</td>
+            <td>
+              <ul>
+                <li *ngFor="let title of person.films">{{ title }}</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>Created</td>
+            <td>{{ person.created | date }}</td>
+          </tr>
+          <tr>
+            <td>Edited</td>
+            <td>{{ person.edited | date }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
