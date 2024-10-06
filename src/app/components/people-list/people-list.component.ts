@@ -28,16 +28,6 @@ export class PeopleListComponent implements OnInit {
     });
   }
 
-  search() {
-    // Implement search logic
-    console.log(this.searchQuery);
-    this.peopleStore.people$.pipe(
-      map((people) =>
-        people.filter((person) => person.name.includes(this.searchQuery))
-      )
-    );
-  }
-
   loadNextPage() {
     this.peopleStore.nextPage$.pipe(take(1)).subscribe((nextPage) => {
       if (nextPage) {

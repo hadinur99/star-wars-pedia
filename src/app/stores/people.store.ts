@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { Person } from '../models/person';
-import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { Film } from '../models/films';
-import { HomeWorld } from '../models/homeworld';
+import { PeopleService } from '../services/people.service';
 
 export interface PeopleState {
   people: Person[];
@@ -19,9 +17,7 @@ export interface PeopleState {
   providedIn: 'root',
 })
 export class PeopleStore extends ComponentStore<PeopleState> {
-  private SWAPI_API = 'https://swapi.dev/api/people/';
-
-  constructor(private http: HttpClient) {
+  constructor(private peopleService: PeopleService) {
     super({
       people: [],
       loading: false,
@@ -48,18 +44,16 @@ export class PeopleStore extends ComponentStore<PeopleState> {
       nextPage: page,
     }));
 
-    this.http
-      .get<{ results: Person[]; next: string | null }>(
-        `${this.SWAPI_API}?page=${page}`
-      )
+    this.peopleService
+      .getListPeople(page)
       .pipe(
         tap({
-          next: (response) => {
+          next: (people: Person[]) => {
             this.setState((state) => ({
               ...state,
-              people: [...state.people, ...response.results], // Append new results to existing people
+              people: [...state.people, ...people],
               loading: false,
-              nextPage: response.next ? page + 1 : null,
+              nextPage: people.length ? page + 1 : null,
               error: null,
             }));
           },
@@ -75,7 +69,7 @@ export class PeopleStore extends ComponentStore<PeopleState> {
       .subscribe();
   }
 
-  fetchPerson(peopleId: string | null): Observable<Person> {
+  fetchPersonDetails(peopleId: string | null): Observable<Person> {
     this.setState((state) => ({
       ...state,
       loading: true,
@@ -85,22 +79,25 @@ export class PeopleStore extends ComponentStore<PeopleState> {
       homeworld: null,
     }));
 
-    return this.http.get<Person>(`${this.SWAPI_API}/${peopleId}`).pipe(
-      switchMap((person) => {
+    return this.peopleService.getDetailsPerson(peopleId).pipe(
+      switchMap((person: Person) => {
         const filmsRequest = person.films.map((url: string) =>
-          this.http.get<Film>(url)
+          this.peopleService.getListFilms(url)
         );
-        const homeworldRequest = this.http.get<HomeWorld>(person.homeworld);
+        const homeworldRequest = this.peopleService.getHomeWorld(
+          person.homeworld
+        );
+
         return forkJoin([forkJoin(filmsRequest), homeworldRequest]).pipe(
-          map(([films, homeworld]) => ({
+          map(([filmsArray, homeworld]) => ({
             ...person,
-            films: films.map((film) => film.title),
+            films: filmsArray.flat().map((film) => film.title),
             homeworld: homeworld.name,
           }))
         );
       }),
       tap({
-        next: (response) => {
+        next: (response: Person) => {
           this.setState((state) => ({
             ...state,
             person: response,

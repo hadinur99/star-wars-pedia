@@ -22,7 +22,7 @@ export class PeopleDetailComponent {
   ) {
     const peopleId = this.route.snapshot.paramMap.get('id');
     console.log(peopleId);
-    this.person$ = this.peopleStore.fetchPerson(peopleId);
+    this.person$ = this.peopleStore.fetchPersonDetails(peopleId);
   }
 
   ngOnInit(): void {}

@@ -9,7 +9,7 @@ export interface PersonResponse {
 }
 
 export interface Person {
-  id: number;
+  id?: number;
   name: string;
   height: string;
   mass: string;
