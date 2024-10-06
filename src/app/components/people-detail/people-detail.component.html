@@ -65,16 +65,19 @@
           <tr>
             <td>Homeworld</td>
             <td>
-              <!-- <a [href]="person.homeworld" target="_blank">View Homeworld</a> -->
-              {{ person.homeworld }}
+              <span class="tag is-warning is-light">{{
+                person.homeworld
+              }}</span>
             </td>
           </tr>
           <tr>
             <td>Films</td>
             <td>
-              <ul>
-                <li *ngFor="let title of person.films">{{ title }}</li>
-              </ul>
+              <ol>
+                <li *ngFor="let title of person.films">
+                  <span class="tag is-primary is-light">{{ title }}</span>
+                </li>
+              </ol>
             </td>
           </tr>
         </tbody>
