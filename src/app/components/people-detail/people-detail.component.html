@@ -1,10 +1,17 @@
-<!-- Page Details -->
-
 <!-- loading state -->
 <div *ngIf="loading$ | async" class="mt-4 is-flex is-justify-content-center">
   <div class="loader is-loading"></div>
 </div>
+<div
+  *ngIf="error$ | async as error"
+  class="mt-4 is-flex is-justify-content-center"
+>
+  <div class="notification is-danger"><strong>Error!</strong> {{ error }}</div>
+</div>
 <div *ngIf="person$ | async as person">
+  <button class="button is-info is-dark mt-4 is-gap-1" (click)="goBack()">
+    <i class="fa fa-arrow-left"></i> Back
+  </button>
   <div class="columns is-justify-content-center">
     <div class="column is-one-third">
       <div class="card">
@@ -69,14 +76,6 @@
                 <li *ngFor="let title of person.films">{{ title }}</li>
               </ul>
             </td>
-          </tr>
-          <tr>
-            <td>Created</td>
-            <td>{{ person.created | date }}</td>
-          </tr>
-          <tr>
-            <td>Edited</td>
-            <td>{{ person.edited | date }}</td>
           </tr>
         </tbody>
       </table>

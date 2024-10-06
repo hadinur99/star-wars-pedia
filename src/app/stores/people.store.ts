@@ -40,11 +40,6 @@ export class PeopleStore extends ComponentStore<PeopleState> {
   // Selector details page
   readonly person$ = this.select((state) => state.person);
 
-  readonly setSearchQuery = this.updater((state, searchQuery: string) => ({
-    ...state,
-    searchQuery,
-  }));
-
   fetchPeople(page: number): void {
     this.setState((state) => ({
       ...state,
@@ -92,7 +87,7 @@ export class PeopleStore extends ComponentStore<PeopleState> {
 
     return this.http.get<Person>(`${this.SWAPI_API}/${peopleId}`).pipe(
       switchMap((person) => {
-        const filmsRequest = person.films.map((url: any) =>
+        const filmsRequest = person.films.map((url: string) =>
           this.http.get<Film>(url)
         );
         const homeworldRequest = this.http.get<HomeWorld>(person.homeworld);
