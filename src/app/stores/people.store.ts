@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { Person } from '../models/person';
+import { Person, PeopleResponse } from '../models/person';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { PeopleService } from '../services/people.service';
@@ -48,12 +48,12 @@ export class PeopleStore extends ComponentStore<PeopleState> {
       .getListPeople(page)
       .pipe(
         tap({
-          next: (people: Person[]) => {
+          next: (response: PeopleResponse) => {
             this.setState((state) => ({
               ...state,
-              people: [...state.people, ...people],
+              people: [...state.people, ...response.results],
               loading: false,
-              nextPage: people.length ? page + 1 : null,
+              nextPage: response.next ? page + 1 : null,
               error: null,
             }));
           },

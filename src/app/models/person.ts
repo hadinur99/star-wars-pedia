@@ -1,7 +1,4 @@
-import { Film } from './films';
-import { HomeWorld } from './homeworld';
-
-export interface PersonResponse {
+export interface PeopleResponse {
   count: number;
   next: string | null;
   previous: string | null;
